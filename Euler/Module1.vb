@@ -1,7 +1,7 @@
 ﻿Module Module1
 
     Sub Main()
-
+        Problem1()
     End Sub
 
 End Module
