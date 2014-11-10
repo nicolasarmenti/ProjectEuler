@@ -432,6 +432,111 @@
         Console.ReadKey()
     End Sub
 
+    Sub Problem40()
+        Dim BigN As String = String.Empty
+        Dim Ans As BigInteger = 1
+        Dim i As Integer = 1
+        Do
+            BigN &= i.ToString
+            i += 1
+        Loop Until BigN.Length >= 1000000
+
+        Ans *= CInt(BigN.Substring(0, 1)) * CInt(BigN.Substring(9, 1)) * CInt(BigN.Substring(99, 1)) * CInt(BigN.Substring(999, 1)) * CInt(BigN.Substring(9999, 1)) * CInt(BigN.Substring(99999, 1)) * CInt(BigN.Substring(999999, 1))
+
+        Console.WriteLine(Ans)
+        Console.ReadKey()
+    End Sub
+
+    Sub Problem41() 'What is the largest n-digit pandigital prime that exists?
+        Dim PandigitalPrime As Integer = 0
+
+        For i As Integer = 1 To 1000000000
+            If isPandigital(i) Then
+                If esPrimo(i) Then
+                    PandigitalPrime = i
+                End If
+            End If
+        Next
+
+        Console.WriteLine(PandigitalPrime)
+        Console.ReadKey()
+    End Sub
+
+
+    Sub Problem44()
+        Dim D As Integer = 999999999
+        Dim suma As Integer, resta As Integer
+
+        For j As Integer = 1 To 5000
+            For k As Integer = 1 To j
+                suma = pentagonalNumber(j) + pentagonalNumber(k)
+                resta = Math.Abs(pentagonalNumber(j) - pentagonalNumber(k))
+                If isPentagonal(suma) Then
+                    If isPentagonal(resta) Then
+                        If resta < D Then
+                            D = resta
+                        End If
+                    End If
+                End If
+            Next
+        Next
+
+        Console.WriteLine(D)
+        Console.ReadKey()
+    End Sub
+
+
+    Sub Problem48() 'Find the last ten digits of the series, 11 + 22 + 33 + ... + 10001000.
+        Dim s As BigInteger = 0
+        For i As Integer = 1 To 1000
+            s += BigInteger.Pow(i, i)
+        Next
+        Console.WriteLine(s.ToString.Substring(s.ToString.Length - 10))
+        Console.ReadKey()
+    End Sub
+
+
+    Sub Problem52() 'Find the smallest positive integer, x, such that 2x, 3x, 4x, 5x, and 6x, contain the same digits
+        Dim i As Integer = 1, j As Integer
+        Dim AuxI() As Char, AuxJ() As Char
+
+        Do
+            AuxI = i.ToString.ToCharArray
+            j = 2 * i
+            AuxJ = j.ToString.ToCharArray
+            Array.Sort(AuxI)
+            Array.Sort(AuxJ)
+            If AuxI = AuxJ Then
+                j = 3 * i
+                AuxJ = j.ToString.ToCharArray
+                Array.Sort(AuxJ)
+                If AuxI = AuxJ Then
+                    j = 4 * i
+                    AuxJ = j.ToString.ToCharArray
+                    Array.Sort(AuxJ)
+                    If AuxI = AuxJ Then
+                        j = 5 * i
+                        AuxJ = j.ToString.ToCharArray
+                        Array.Sort(AuxJ)
+                        If AuxI = AuxJ Then
+                            j = 2 * i
+                            AuxJ = j.ToString.ToCharArray
+                            Array.Sort(AuxJ)
+                            If AuxI = AuxJ Then
+                                Exit Do
+                            End If
+                        End If
+                    End If
+                End If
+            End If
+            i += 1
+        Loop
+
+        Console.WriteLine(i)
+        Console.ReadKey()
+    End Sub
+
+
     Sub Problem55() 'How many Lychrel numbers are there below ten-thousand?
         Dim Lychrels As Integer = 0
         For i As Decimal = 1 To 10000
@@ -441,6 +546,45 @@
         Next
 
         Console.WriteLine(Lychrels)
+        Console.ReadKey()
+    End Sub
+
+    Sub Problem56() 'Considering natural numbers of the form, ab, where a, b < 100, what is the maximum digital sum?
+        Dim Num As BigInteger
+        Dim Sum As Integer = 0
+        Dim SumAux As Integer
+
+        For a As Integer = 1 To 100
+            For b As Integer = 1 To 100
+                Num = BigInteger.Pow(a, b)
+                SumAux = SumaDigitos(Num.ToString)
+                If SumAux > Sum Then
+                    Sum = SumAux
+                End If
+            Next
+        Next
+
+        Console.WriteLine(Sum)
+        Console.ReadKey()
+    End Sub
+
+
+    Sub Problem69() 'Find the value of n ≤ 1,000,000 for which n/φ(n) is a maximum.
+        Dim Primos As List(Of Long) = New List(Of Long)
+        Primos.Add(2)
+
+        For i As Long = 3 To 1000000 Step 2
+            If esPrimo(i, Primos) Then
+                Primos.Add(i)
+                If Primos.Aggregate(1, Function(x, y) x * y) > 1000000 Then
+                    Exit For
+                End If
+            End If
+        Next
+
+        Primos.RemoveAt(Primos.Count - 1)
+
+        Console.WriteLine(Primos.Aggregate(1, Function(x, y) x * y))
         Console.ReadKey()
     End Sub
 End Module

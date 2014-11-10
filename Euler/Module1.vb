@@ -1,25 +1,37 @@
 ﻿Module Module1
 
-    Sub Main() '(Problem 40)
-        Dim BigN As String = String.Empty
-        Dim Ans As BigInteger = 1
-        Dim i As Integer = 1
-        Do
-            BigN &= i.ToString
-            i += 1
-        Loop Until BigN.Length >= 1000000
-
-        Ans *= BigN.Substring(1, 1) * BigN.Substring(10, 1) * BigN.Substring(100, 1) * BigN.Substring(1000, 1) * BigN.Substring(10000, 1) * BigN.Substring(100000, 1) * BigN.Substring(1000000, 1)
-
-        Console.WriteLine(Ans)
+    Sub Main() 'Problem 70
+        Dim Min As Double = 999999999999999999
+        Dim minN As Integer
+        Dim minAux As Double
+        Dim phii As Double
+        For i As BigInteger = 2 To BigInteger.Pow(10, 7)
+            phii = phi(i)
+            If sonPermutados(phii, i.ToString) Then
+                minAux = CType(i, Double) / phii
+                If minAux <= Min Then
+                    Min = minAux
+                    minN = i
+                End If
+            End If
+        Next
+        Console.WriteLine(minN)
         Console.ReadKey()
     End Sub
+
+    Friend Function sonPermutados(ByVal a As String, ByVal b As String) As Boolean
+        Dim ArrA() As Char = a.ToCharArray
+        Dim Arrb() As Char = b.ToCharArray
+        Array.Sort(ArrA)
+        Array.Sort(Arrb)
+        Return ArrA = Arrb
+    End Function
 End Module
 
 
 'Posibles: 
-'   41
 '   42
 '   46
 '   54
 '   69
+
