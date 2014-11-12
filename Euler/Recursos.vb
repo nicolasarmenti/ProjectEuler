@@ -172,4 +172,12 @@
             Return mcd(b, a Mod b)
         End If
     End Function
+
+    Friend Function sonPermutados(ByVal a As String, ByVal b As String) As Boolean
+        Dim ArrA() As Char = a.ToCharArray
+        Dim Arrb() As Char = b.ToCharArray
+        Array.Sort(ArrA)
+        Array.Sort(Arrb)
+        Return ArrA = Arrb
+    End Function
 End Module

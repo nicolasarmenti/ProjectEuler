@@ -587,4 +587,67 @@
         Console.WriteLine(Primos.Aggregate(1, Function(x, y) x * y))
         Console.ReadKey()
     End Sub
+
+    Sub Problem70() 'Find the value of n, 1 < n < 107, for which φ(n) is a permutation of n and the ratio n/φ(n) produces a minimum.
+        Dim Best As Long = 1
+        Dim phiBest As Long = 1
+        Dim bestRatio As Double = Double.PositiveInfinity
+        Dim Limit As BigInteger = BigInteger.Pow(10, 7)
+        Dim Primos As List(Of Long) = New List(Of Long)
+        For i As Long = 2001 To 5000 Step 2
+            If esPrimo(i) Then
+                Primos.Add(i)
+            End If
+        Next
+
+        For i As Integer = 1 To Primos.Count - 1
+            For j As Integer = i + 1 To Primos.Count - 1
+                Dim N As Long = Primos(i) * Primos(j)
+                If (N > Limit) Then Exit For
+
+                Dim phii As Long = (Primos(i) - 1) * (Primos(j) - 1)
+                Dim Ratio As Double = CDbl(N) / phii
+
+                If (sonPermutados(N, phii) And bestRatio > Ratio) Then
+                    Best = N
+                    phiBest = phii
+                    bestRatio = Ratio
+                End If
+            Next
+        Next
+
+        Console.WriteLine("Best: " & Best)
+        Console.WriteLine("Best ratio: " & bestRatio)
+        Console.ReadKey()
+    End Sub
+
+
+    Sub Problem74() 'How many chains, with a starting number below one million, contain exactly sixty non-repeating terms?
+        Dim Count As Integer = 0
+        Dim Chain As List(Of Integer) = New List(Of Integer)
+        Dim Limit As Integer = 1000000
+
+        For n As Integer = 1 To Limit
+            Chain.Add(n)
+            While Chain.Count <= 60000
+                Dim Sum As Integer = 0
+                Dim Number As String = Chain(Chain.Count - 1)
+                While Number.Length > 0
+                    Sum += Factorial(Number.Substring(0, 1))
+                    Number = Number.Substring(1)
+                End While
+                If Chain.Contains(Sum) Then
+                    Exit While
+                End If
+                Chain.Add(Sum)
+            End While
+            If Chain.Count.Equals(60) Then
+                Count += 1
+            End If
+            Chain.Clear()
+        Next
+
+        Console.WriteLine(Count)
+        Console.ReadKey()
+    End Sub
 End Module
