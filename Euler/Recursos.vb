@@ -180,4 +180,35 @@
         Array.Sort(Arrb)
         Return ArrA = Arrb
     End Function
+
+    Friend Function readMatrix(ByVal file As String, ByVal Separator As String) As Integer(,)
+        Dim line As String
+        Dim linePieces() As String
+        Dim lines As Integer = 0
+
+        Dim reader As IO.StreamReader = New IO.StreamReader(file)
+        line = reader.ReadLine
+        While Not line = Nothing
+            lines += 1
+            line = reader.ReadLine
+        End While
+
+        Dim inputTriangle(lines - 1, lines - 1) As Integer
+        reader.BaseStream.Seek(0, IO.SeekOrigin.Begin)
+
+        Dim j As Integer = 0
+        line = reader.ReadLine
+        While Not line = Nothing
+            linePieces = line.Split(Separator)
+            For i As Integer = 0 To linePieces.Length - 1
+                inputTriangle(j, i) = Integer.Parse(linePieces(i))
+            Next
+            j += 1
+            line = reader.ReadLine
+        End While
+
+        reader.Close()
+
+        Return inputTriangle
+    End Function
 End Module

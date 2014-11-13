@@ -252,12 +252,43 @@
         Console.ReadKey()
     End Sub
 
+    Sub Problem15() 'How many such routes are there through a 20×20 grid?
+        Dim Size As Integer = 20
+        Dim Grid(Size + 1, Size + 1) As BigInteger
+
+        For i As Integer = Size To 0 Step -1
+            Grid(i, Size) = 1
+            Grid(Size, i) = 1
+        Next
+
+        For i As Integer = Size - 1 To 0 Step -1
+            For j As Integer = Size - 1 To 0 Step -1
+                Grid(i, j) = Grid(i + 1, j) + Grid(i, j + 1)
+            Next
+        Next
+        Console.WriteLine(Grid(0, 0))
+        Console.ReadKey()
+    End Sub
 
     Sub Problem16() 'What is the sum of the digits of the number 2^1000?
         Dim Exp As BigInteger = 2 ^ 1000
         Dim StrExp As String = Exp.ToString
 
         Console.WriteLine(SumaDigitos(StrExp))
+        Console.ReadKey()
+    End Sub
+
+
+    Sub Problem18() 'Find the maximum total from top to bottom in p018_piramid.txt
+        Dim Piramid(,) As Integer = readMatrix("p018_piramid.txt", " ")
+
+        For i As Integer = Piramid.GetUpperBound(0) - 1 To 0 Step -1
+            For j As Integer = 0 To Piramid.GetUpperBound(1) - 1
+                Piramid(i, j) = Piramid(i, j) + Math.Max(Piramid(i + 1, j), Piramid(i + 1, j + 1))
+            Next
+        Next
+
+        Console.WriteLine(Piramid(0, 0))
         Console.ReadKey()
     End Sub
 
@@ -568,6 +599,19 @@
         Console.ReadKey()
     End Sub
 
+    Sub Problem67() 'Find the maximum total from top to bottom in p067_piramid.txt
+        Dim Piramid(,) As Integer = readMatrix("p067_piramid.txt", " ")
+
+        For i As Integer = Piramid.GetUpperBound(0) - 1 To 0 Step -1
+            For j As Integer = 0 To Piramid.GetUpperBound(1) - 1
+                Piramid(i, j) = Piramid(i, j) + Math.Max(Piramid(i + 1, j), Piramid(i + 1, j + 1))
+            Next
+        Next
+
+        Console.WriteLine(Piramid(0, 0))
+        Console.ReadKey()
+    End Sub
+
 
     Sub Problem69() 'Find the value of n ≤ 1,000,000 for which n/φ(n) is a maximum.
         Dim Primos As List(Of Long) = New List(Of Long)
@@ -648,6 +692,29 @@
         Next
 
         Console.WriteLine(Count)
+        Console.ReadKey()
+    End Sub
+
+
+    Sub Problem81() 'Find the minimal path sum in p081_matrix.txt from the top left to the bottom right by only moving right and down
+        Dim Matrix(,) As Integer = readMatrix("p081_matrix.txt", ",")
+        Dim lastRow = Matrix.GetUpperBound(0)
+        Dim lastColumn = Matrix.GetUpperBound(1)
+
+        For i As Integer = lastRow - 1 To 0 Step -1
+            Matrix(i, lastColumn) += Matrix(i + 1, lastColumn)
+        Next
+        For i As Integer = lastColumn - 1 To 0 Step -1
+            Matrix(lastRow, i) += Matrix(lastRow, i + 1)
+        Next
+
+        For i As Integer = lastRow - 1 To 0 Step -1
+            For j As Integer = lastColumn - 1 To 0 Step -1
+                Matrix(i, j) += Math.Min(Matrix(i + 1, j), Matrix(i, j + 1))
+            Next
+        Next
+
+        Console.WriteLine(Matrix(0, 0))
         Console.ReadKey()
     End Sub
 End Module
