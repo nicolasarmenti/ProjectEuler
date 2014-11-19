@@ -1,4 +1,29 @@
 ﻿Module Recursos
+    'Funciones con Primos
+    Friend Function generarPrimos(ByVal fin As Integer) As List(Of Long)
+        Dim Primos As List(Of Long) = New List(Of Long) From {2}
+        Dim sieveBound As Integer = CInt((fin - 1) / 2)
+        Dim finSqrt As Integer = CInt((Math.Sqrt(fin) - 1) / 2)
+
+        Dim PrimeBits As BitArray = New BitArray(sieveBound + 1, True)
+
+        For i As Integer = 1 To finSqrt
+            If PrimeBits.Get(i) Then
+                For j As Integer = i * 2 * (i + 1) To sieveBound Step (2 * i + 1)
+                    PrimeBits.Set(j, False)
+                Next
+            End If
+        Next
+
+        For i As Integer = 1 To sieveBound
+            If PrimeBits.Get(i) Then
+                Primos.Add(2 * i + 1)
+            End If
+        Next
+
+        Return Primos
+    End Function
+
     Friend Function esPrimo(ByVal Num As Long) As Boolean
         If Num > 1 Then
             For i As Integer = 2 To Num \ 2
@@ -27,40 +52,75 @@
         Return True
     End Function
 
-    Friend Function isPalindrome(ByVal Num As String) As Boolean
-        Dim Reverse As String = StrReverse(Num)
-        Return Num.Equals(Reverse)
-    End Function
-
-    Friend Function factorQ(ByVal Num As ULong) As Integer
-        Dim a As Integer = 1
-        For i As Integer = 2 To CInt(Math.Sqrt(Num))
-            If (Num Mod i) = 0 Then
-                a += 1
-            End If
-        Next
-        Return (a * 2) - 1
-    End Function
-
-    Friend Function isLychrel(ByVal Num As Decimal) As Boolean
-        Dim Inverse As String
-        For i As Integer = 1 To 50
-            Inverse = StrReverse(Num.ToString)
-            Num = Num + Inverse
-            If isPalindrome(Num) Then
+    Friend Function isPrimeTruncateRight(ByVal Numero As String, ByRef Primos As List(Of Long)) As Boolean
+        While Numero.Length > 0
+            If Not esPrimo(Numero, Primos) Then
                 Return False
             End If
-        Next
+            Numero = Numero.Substring(1)
+        End While
         Return True
     End Function
 
-    Friend Function Factorial(ByVal Num As Integer) As BigInteger
-        Select Num
-            Case 1, 0
-                Return 1
-            Case Else
-                Return Factorial(Num - 1) * Num
-        End Select
+    Friend Function isPrimeTruncateLeft(ByVal Numero As String, ByRef Primos As List(Of Long)) As Boolean
+        While Numero.Length > 0
+            If Not esPrimo(Numero, Primos) Then
+                Return False
+            End If
+            Numero = Numero.Substring(0, Numero.Length - 1)
+        End While
+        Return True
+    End Function
+
+
+    '---------------------------------------------------------------------------------------------------'
+    'Operaciones con números
+    Friend Function Factorial(ByVal Num As BigInteger) As BigInteger
+        Dim Ans As BigInteger = 1
+        For i As Integer = 2 To Num
+            Ans *= i
+        Next
+        Return Ans
+    End Function
+
+    Friend Function phi(ByVal N As Integer) As Integer
+        Dim Cant As Integer = 0
+        For i As Integer = 1 To N
+            If mcd(N, i) = 1 Then
+                Cant += 1
+            End If
+        Next
+        Return Cant
+    End Function
+
+    Friend Function mcd(ByVal a As Integer, ByVal b As Integer) As Integer
+        If b = 0 Then
+            Return a
+        Else
+            Return mcd(b, a Mod b)
+        End If
+    End Function
+
+    Friend Function SquareRootDecimal(ByVal N As Integer, ByVal precision As Integer) As BigInteger
+        Dim Limit As BigInteger = BigInteger.Pow(10, precision + 1)
+        Dim a As BigInteger = 5 * N
+        Dim b As BigInteger = 5
+
+        While (b < Limit)
+            If (a >= b) Then
+                a -= b
+                b += 10
+            Else
+                a *= 100
+                b = (b / 10) * 100 + 5
+            End If
+        End While
+
+        Return (b / 100)
+    End Function
+
+    Friend Function combinatory(ByVal N As Integer, ByVal R As Integer) As BigInteger
+        Return (Factorial(N) / (Factorial(R) * Factorial(N - R)))
     End Function
 
     Friend Function SumaDigitos(ByVal Num As String) As Integer
@@ -85,28 +145,49 @@
         Return Sum
     End Function
 
-    Friend Function permutar(ByVal Numero As String) As String
+    Friend Function cantidadFactores(ByVal Num As ULong) As Integer
+        Dim a As Integer = 1
+        For i As Integer = 2 To CInt(Math.Sqrt(Num))
+            If (Num Mod i) = 0 Then
+                a += 1
+            End If
+        Next
+        Return (a * 2) - 1
+    End Function
+
+    Friend Function permutarRotar(ByVal Numero As String) As String
         Numero = (Numero.Substring(1) & Numero.Substring(0, 1))
         Return Numero
     End Function
 
-    Friend Function isPrimeTruncateRight(ByVal Numero As String, ByRef Primos As List(Of Long)) As Boolean
-        While Numero.Length > 0
-            If Not esPrimo(Numero, Primos) Then
-                Return False
+    Friend Function getDivisors(ByVal Numero As Integer) As List(Of Integer)
+        Dim Ans As List(Of Integer) = New List(Of Integer)
+
+        For i As Integer = 1 To Numero \ 2
+            If (Numero Mod i) = 0 Then
+                Ans.Add(i)
             End If
-            Numero = Numero.Substring(1)
-        End While
-        Return True
+        Next
+        Return Ans
     End Function
 
-    Friend Function isPrimeTruncateleft(ByVal Numero As String, ByRef Primos As List(Of Long)) As Boolean
-        While Numero.Length > 0
-            If Not esPrimo(Numero, Primos) Then
+
+    '---------------------------------------------------------------------------------------------------'
+    'Checks con números
+    Friend Function isPalindrome(ByVal Num As String) As Boolean
+        Dim Reverse As String = StrReverse(Num)
+        Return Num.Equals(Reverse)
+    End Function
+
+    Friend Function isLychrel(ByVal Num As Decimal) As Boolean
+        Dim Inverse As String
+        For i As Integer = 1 To 50
+            Inverse = StrReverse(Num.ToString)
+            Num = Num + Inverse
+            If isPalindrome(Num) Then
                 Return False
             End If
-            Numero = Numero.Substring(0, Numero.Length - 1)
-        End While
+        Next
         Return True
     End Function
 
@@ -119,17 +200,52 @@
         Return True
     End Function
 
-    Friend Function contiene(ByVal Cadena As String, ByVal Buscado As String) As Boolean
-        For i As Integer = 0 To Cadena.Length - 1
-            If Cadena.Substring(i, 1) = Buscado Then
-                Return True
-            End If
+    Friend Function sonPermutados(ByVal a As String, ByVal b As String) As Boolean
+        Dim ArrA() As Char = a.ToCharArray
+        Dim Arrb() As Char = b.ToCharArray
+        Array.Sort(ArrA)
+        Array.Sort(Arrb)
+        Return ArrA = Arrb
+    End Function
+
+    Friend Function isGoldbach(ByVal N As Integer, ByRef Primos As List(Of Long)) As Boolean
+        Dim Ans As Boolean = False
+
+        For i As Integer = CInt(Math.Sqrt(N)) To 1 Step -1
+            For Each Primo In Primos
+                If (Primo + (2 * (i ^ 2))) = N Then
+                    Ans = True
+                    Exit For
+                End If
+            Next
         Next
-        Return False
+
+        Return Ans
+    End Function
+
+    Friend Function isTwiceSquare(ByVal N As Long) As Boolean
+        Dim squateTest As Double = Math.Sqrt(N / 2)
+        Return (squateTest = CInt(squateTest))
+    End Function
+
+
+    '---------------------------------------------------------------------------------------------------'
+    'Números poligonales
+    Friend Function triangularNumber(ByVal N As Integer) As Integer
+        Return (N * (N + 1)) / 2
     End Function
 
     Friend Function pentagonalNumber(ByVal N As Integer) As Integer
         Return (N * ((3 * N) - 1)) / 2
+    End Function
+
+    Friend Function hexagonalNumber(ByVal N As Integer) As Integer
+        Return (N * ((2 * N) - 1))
+    End Function
+
+    Friend Function isTriangular(ByVal N As Integer) As Boolean
+        Dim Aux As Double = (Math.Sqrt(1 + 8 * N) + 1.0) / 2.0
+        Return Aux = CInt(Aux)
     End Function
 
     Friend Function isPentagonal(ByVal N As Integer) As Boolean
@@ -142,45 +258,29 @@
         Return Aux = CInt(Aux)
     End Function
 
-    Friend Function isTriangular(ByVal N As Integer) As Boolean
-        Dim Aux As Double = (Math.Sqrt(1 + 8 * N) + 1.0) / 2.0
-        Return Aux = CInt(Aux)
-    End Function
 
-    Friend Function triangularNumber(ByVal N As Integer) As Integer
-        Return (N * (N + 1)) / 2
-    End Function
-
-    Friend Function hexagonalNumber(ByVal N As Integer) As Integer
-        Return (N * ((2 * N) - 1))
-    End Function
-
-    Friend Function phi(ByVal N As Integer) As Integer
-        Dim Cant As Integer = 0
-        For i As Integer = 1 To N
-            If mcd(N, i) = 1 Then
-                Cant += 1
+    '---------------------------------------------------------------------------------------------------'
+    'Operaciones con letras
+    Friend Function contiene(ByVal Cadena As String, ByVal Buscado As String) As Boolean
+        For i As Integer = 0 To Cadena.Length - 1
+            If Cadena.Substring(i, 1) = Buscado Then
+                Return True
             End If
         Next
-        Return Cant
+        Return False
     End Function
 
-    Friend Function mcd(ByVal a As Integer, ByVal b As Integer) As Integer
-        If b = 0 Then
-            Return a
-        Else
-            Return mcd(b, a Mod b)
-        End If
+    Friend Function getValue(ByVal Palabra As String) As Integer
+        Dim Total As Integer = 0
+        For Each Caracter In Palabra
+            Total += Asc(Caracter) - 64
+        Next
+        Return Total
     End Function
 
-    Friend Function sonPermutados(ByVal a As String, ByVal b As String) As Boolean
-        Dim ArrA() As Char = a.ToCharArray
-        Dim Arrb() As Char = b.ToCharArray
-        Array.Sort(ArrA)
-        Array.Sort(Arrb)
-        Return ArrA = Arrb
-    End Function
 
+    '---------------------------------------------------------------------------------------------------'
+    'Funciones para input de txt
     Friend Function readMatrix(ByVal file As String, ByVal Separator As String) As Integer(,)
         Dim line As String
         Dim linePieces() As String
@@ -211,4 +311,26 @@
 
         Return inputTriangle
     End Function
+
+    Friend Function readWords(ByVal file As String, ByVal Separator As String) As List(Of String)
+        Dim line As String
+
+        Dim inputWords() As String
+        Dim reader As IO.StreamReader = New IO.StreamReader(file)
+        line = reader.ReadLine
+        inputWords = Split(line, Separator)
+
+        Dim Words As List(Of String) = New List(Of String)
+        For Each Word In inputWords
+            Word = Word.Trim(Chr(34))
+            Words.Add(Word)
+        Next
+
+        reader.Close()
+
+        Return Words
+    End Function
+
+
+    '---------------------------------------------------------------------------------------------------'
 End Module
