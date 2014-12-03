@@ -72,6 +72,17 @@
         Return True
     End Function
 
+    Friend Function SumOfFactors(ByVal Number As Integer) As Integer
+        Dim Sum As Integer = 0
+        For i As Integer = 1 To Number \ 2
+            If (Number Mod i) = 0 Then
+                Sum += i
+            End If
+        Next
+
+        Return Sum
+    End Function
+
 
     '---------------------------------------------------------------------------------------------------'
     'Operaciones con números
