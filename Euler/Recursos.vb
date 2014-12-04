@@ -259,6 +259,10 @@
         Return Aux = CInt(Aux)
     End Function
 
+    Friend Function isSquare(ByVal Number As Integer) As Boolean
+        Return (Math.Sqrt(Number) = Int(Math.Sqrt(Number)))
+    End Function
+
     Friend Function isPentagonal(ByVal N As Integer) As Boolean
         Dim aux As Double = (Math.Sqrt(1 + 24 * N) + 1.0) / 6.0 'Función inversa a pentagonalNumber (aplicando cuadreatica)
         Return aux = CInt(aux)

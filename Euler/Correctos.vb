@@ -510,6 +510,25 @@
         Console.ReadKey()
     End Sub
 
+    Sub Problem32() 'Find the sum of all products whose multiplicand/multiplier/product identity can be written as a 1 through 9 pandigital.
+        Dim Productos As List(Of Integer) = New List(Of Integer)
+        For i As Integer = 2 To 100
+            For j As Integer = i + 1 To 10000 \ i
+                Dim prod As Integer = i * j
+                Dim full As String = i.ToString & j.ToString & prod.ToString
+                If full.Length = 9 Then
+                    If isPandigital(i.ToString & j.ToString & prod.ToString) Then
+                        If Not Productos.Contains(prod) Then
+                            Productos.Add(prod)
+                        End If
+                    End If
+                End If
+            Next
+        Next
+        Console.WriteLine(Productos.Sum)
+        Console.ReadKey()
+    End Sub
+
 
     Sub Problem34() 'Find the sum of all numbers which are equal to the sum of the factorial of their digits
         Dim Numbers As New List(Of Integer)
@@ -593,6 +612,28 @@
         Console.ReadKey()
     End Sub
 
+    Sub Problem38() 'What is the largest 1 to 9 pandigital 9-digit number that can be formed as the concatenated product of an integer with (1,2, ... , n) where n > 1?
+        Dim Ans As Integer = 0
+        For i As Integer = 1 To 9999
+            Dim factor As Integer = 1
+            Dim concat As Integer = i * factor
+            Do
+                factor += 1
+                If (concat & i * factor).ToString.Length <= 9 Then
+                    concat &= i * factor
+                Else
+                    Exit Do
+                End If
+            Loop
+            If concat.ToString.Length = 9 Then
+                If isPandigital(concat) Then
+                    Ans = Math.Max(Ans, concat)
+                End If
+            End If
+        Next
+        Console.WriteLine(Ans)
+        Console.ReadKey()
+    End Sub
 
     Sub Problem39() 'If P=perimeter of a right angle triangle and a,b,c their sides lengths. For which value of p ≤ 1000, is the number of solutions maximised?
         Dim Solutions As Integer
@@ -831,6 +872,31 @@
         Next
 
         Console.WriteLine(Sum)
+        Console.ReadKey()
+    End Sub
+
+    Sub Problem58() 'f one complete new layer is wrapped around the spiral above, a square spiral with side length 9 will be formed. If this process is continued, what is the side length of the square spiral for which the ratio of primes along both diagonals first falls below 10%?
+        Dim MaxValue As Integer = 1
+        Dim Steps As Integer = 2
+        Dim Primos As List(Of Long) = generarPrimos(1000000)
+        Dim PrimosCount As Integer = 0
+        Dim NotPrimosCount As Integer = 1
+        Dim SideLength As Integer = 1
+
+        Do
+            For i As Integer = 1 To 4
+                MaxValue += Steps
+                If esPrimo(MaxValue, Primos) Then
+                    PrimosCount += 1
+                Else
+                    NotPrimosCount += 1
+                End If
+            Next
+            SideLength += 2
+            Steps += 2
+        Loop Until ((PrimosCount * 100) / (PrimosCount + NotPrimosCount)) < 10
+
+        Console.WriteLine(SideLength)
         Console.ReadKey()
     End Sub
 
