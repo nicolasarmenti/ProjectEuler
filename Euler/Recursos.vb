@@ -346,6 +346,21 @@
         Return Words
     End Function
 
+    Friend Function readList(ByVal file As String) As Integer()
+        Dim line As String
+        Dim inputList As List(Of Integer) = New List(Of Integer)
+
+        Dim reader As IO.StreamReader = New IO.StreamReader(file)
+        line = reader.ReadLine
+        While Not line = Nothing
+            inputList.Add(line)
+            line = reader.ReadLine
+        End While
+
+        reader.Close()
+        Return inputList.ToArray
+    End Function
+
 
     '---------------------------------------------------------------------------------------------------'
 End Module

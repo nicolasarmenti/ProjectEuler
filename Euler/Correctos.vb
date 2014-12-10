@@ -962,6 +962,61 @@
         Console.ReadKey()
     End Sub
 
+    Sub Problem71() 'By listing the set of reduced proper fractions for d ≤ 1,000,000 in ascending order of size, find the numerator of the fraction immediately to the left of 3/7.
+        Dim limit As Integer = 1000000
+        Dim EnuAns As Integer = 1
+        Dim DenAns As Integer = 10000
+        Dim EnuLimit As Integer = 3
+        Dim DenLimit As Integer = 7
+
+        For q As Integer = limit To 2 Step -1
+            Dim p As Long = (((EnuLimit * q) - 1) \ DenLimit)
+            If Math.BigMul(p, DenAns) > Math.BigMul(EnuAns, q) Then
+                EnuAns = p
+                DenAns = q
+            End If
+        Next
+
+        Console.WriteLine("Enumerator:" & EnuAns)
+        Console.WriteLine("Denominator:" & DenAns)
+        Console.ReadKey()
+    End Sub
+
+    Sub Problem72() 'How many elements would be contained in the set of reduced proper fractions for d ≤ 1,000,000?
+        Dim limit As Integer = 1000000
+        Dim Phii() As Integer = Enumerable.Range(0, limit + 1).ToArray
+        Dim Ans As Long = 0
+
+        For i As Integer = 2 To limit
+            If Phii(i) = i Then
+                For j As Integer = i To limit Step i
+                    Phii(j) = Phii(j) / i * (i - 1)
+                Next
+            End If
+            Ans += Phii(i)
+        Next
+        Console.WriteLine(Ans)
+        Console.ReadKey()
+    End Sub
+
+    Sub Problem73() 'How many fractions lie between 1/3 and 1/2 in the sorted set of reduced proper fractions for d ≤ 12,000?
+        Dim limit As Integer = 12000
+        Dim Ans As Integer = 0
+
+        For d As Integer = 2 To limit
+            For n As Integer = 2 To d
+                If (n * 3) > d Then
+                    If (n * 2) < d Then
+                        If mcd(n, d) = 1 Then
+                            Ans += 1
+                        End If
+                    End If
+                End If
+            Next
+        Next
+        Console.WriteLine(Ans)
+        Console.ReadKey()
+    End Sub
 
     Sub Problem74() 'How many chains, with a starting number below one million, contain exactly sixty non-repeating terms?
         Dim Count As Integer = 0
@@ -1008,6 +1063,22 @@
         Console.ReadKey()
     End Sub
 
+
+    Sub Problem79() 'Given that the three characters are always asked for in order, analyse the file so as to determine the shortest possible secret passcode of unknown length.
+        'Lo hice a mano
+        'Los pasos:
+        '319
+        '319680
+        '316980
+        '3126980
+        '3162980
+        '31762980
+        '31762890
+        '37162890
+        '73162890
+        Console.WriteLine("73162890")
+        Console.ReadKey()
+    End Sub
 
     Sub Problem80() 'For the first one hundred natural numbers, find the total of the digital sums of the first one hundred decimal digits for all the irrational square roots.
         Dim Ans As BigInteger = 0
