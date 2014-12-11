@@ -26,7 +26,7 @@
 
     Friend Function esPrimo(ByVal Num As Long) As Boolean
         If Num > 1 Then
-            For i As Integer = 2 To Num \ 2
+            For i As Integer = 2 To CInt(Num \ 2)
                 If (Num Mod i) = 0 Then
                     Return False
                 End If
@@ -39,7 +39,7 @@
 
     Friend Function esPrimo(ByVal Num As Long, ByRef Primos As List(Of Long)) As Boolean
         If Num > 1 Then
-            For Each Primo In Primos
+            For Each Primo As Long In Primos
                 If Primo * Primo <= Num Then
                     If (Num Mod Primo) = 0 Then
                         Return False
@@ -54,7 +54,7 @@
 
     Friend Function isPrimeTruncateRight(ByVal Numero As String, ByRef Primos As List(Of Long)) As Boolean
         While Numero.Length > 0
-            If Not esPrimo(Numero, Primos) Then
+            If Not esPrimo(CLng(Numero), Primos) Then
                 Return False
             End If
             Numero = Numero.Substring(1)
@@ -64,7 +64,7 @@
 
     Friend Function isPrimeTruncateLeft(ByVal Numero As String, ByRef Primos As List(Of Long)) As Boolean
         While Numero.Length > 0
-            If Not esPrimo(Numero, Primos) Then
+            If Not esPrimo(CLng(Numero), Primos) Then
                 Return False
             End If
             Numero = Numero.Substring(0, Numero.Length - 1)
@@ -86,7 +86,7 @@
 
     '---------------------------------------------------------------------------------------------------'
     'Operaciones con números
-    Friend Function Factorial(ByVal Num As BigInteger) As BigInteger
+    Friend Function Factorial(ByVal Num As Integer) As BigInteger
         Dim Ans As BigInteger = 1
         For i As Integer = 2 To Num
             Ans *= i
@@ -134,22 +134,22 @@
         Return (Factorial(N) / (Factorial(R) * Factorial(N - R)))
     End Function
 
-    Friend Function SumaDigitos(ByVal Num As String) As Integer
+    Friend Function SumaDigitos(ByVal Num As String) As ULong
         Dim Sum As ULong = 0
 
         While Num.Length > 0
-            Sum += Num.Substring(0, 1)
+            Sum += CULng(Num.Substring(0, 1))
             Num = Num.Substring(1)
         End While
 
         Return Sum
     End Function
 
-    Friend Function SumaDigitos(ByVal Num As String, ByVal Exp As Integer) As Integer
+    Friend Function SumaDigitos(ByVal Num As String, ByVal Exp As Integer) As ULong
         Dim Sum As ULong = 0
 
         While Num.Length > 0
-            Sum += (CInt(Num.Substring(0, 1))) ^ Exp
+            Sum += CULng((CInt(Num.Substring(0, 1))) ^ Exp)
             Num = Num.Substring(1)
         End While
 
@@ -182,6 +182,15 @@
         Return Ans
     End Function
 
+    Friend Function perimeter(ByVal A As Integer, ByVal B As Integer, ByVal C As Integer) As Integer
+        Return A + b + C
+    End Function
+
+    Friend Function areaFromSides(ByVal A As Integer, ByVal B As Integer, ByVal C As Integer) As Decimal
+        Dim P As Integer = perimeter(A, B, C)
+        Return CDec(Math.Sqrt(P * (P - A) * (P - B) * (P - C)))
+    End Function
+
 
     '---------------------------------------------------------------------------------------------------'
     'Checks con números
@@ -190,12 +199,12 @@
         Return Num.Equals(Reverse)
     End Function
 
-    Friend Function isLychrel(ByVal Num As Decimal) As Boolean
+    Friend Function isLychrel(ByVal Num As Integer) As Boolean
         Dim Inverse As String
         For i As Integer = 1 To 50
             Inverse = StrReverse(Num.ToString)
-            Num = Num + Inverse
-            If isPalindrome(Num) Then
+            Num = Num + CInt(Inverse)
+            If isPalindrome(Num.ToString) Then
                 Return False
             End If
         Next
@@ -204,7 +213,7 @@
 
     Friend Function isPandigital(ByVal Number As String) As Boolean
         For i As Integer = 1 To Number.Length
-            If Not contiene(Number, i) Then
+            If Not contiene(Number, i.ToString) Then
                 Return False
             End If
         Next
@@ -223,7 +232,7 @@
         Dim Ans As Boolean = False
 
         For i As Integer = CInt(Math.Sqrt(N)) To 1 Step -1
-            For Each Primo In Primos
+            For Each Primo As Long In Primos
                 If (Primo + (2 * (i ^ 2))) = N Then
                     Ans = True
                     Exit For
@@ -243,11 +252,11 @@
     '---------------------------------------------------------------------------------------------------'
     'Números poligonales
     Friend Function triangularNumber(ByVal N As Integer) As Integer
-        Return (N * (N + 1)) / 2
+        Return CInt((N * (N + 1)) / 2)
     End Function
 
     Friend Function pentagonalNumber(ByVal N As Integer) As Integer
-        Return (N * ((3 * N) - 1)) / 2
+        Return CInt((N * ((3 * N) - 1)) / 2)
     End Function
 
     Friend Function hexagonalNumber(ByVal N As Integer) As Integer
@@ -287,7 +296,7 @@
 
     Friend Function getValue(ByVal Palabra As String) As Integer
         Dim Total As Integer = 0
-        For Each Caracter In Palabra
+        For Each Caracter As Char In Palabra
             Total += Asc(Caracter) - 64
         Next
         Return Total
@@ -314,7 +323,7 @@
         Dim j As Integer = 0
         line = reader.ReadLine
         While Not line = Nothing
-            linePieces = line.Split(Separator)
+            linePieces = line.Split(CChar(Separator))
             For i As Integer = 0 To linePieces.Length - 1
                 inputTriangle(j, i) = Integer.Parse(linePieces(i))
             Next
@@ -336,7 +345,7 @@
         inputWords = Split(line, Separator)
 
         Dim Words As List(Of String) = New List(Of String)
-        For Each Word In inputWords
+        For Each Word As String In inputWords
             Word = Word.Trim(Chr(34))
             Words.Add(Word)
         Next
@@ -353,7 +362,7 @@
         Dim reader As IO.StreamReader = New IO.StreamReader(file)
         line = reader.ReadLine
         While Not line = Nothing
-            inputList.Add(line)
+            inputList.Add(CInt(line))
             line = reader.ReadLine
         End While
 
