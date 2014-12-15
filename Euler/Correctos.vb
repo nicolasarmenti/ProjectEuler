@@ -1167,4 +1167,81 @@
 
         Return Count
     End Function
+
+
+    Function Problem95() As Integer
+        'Find the smallest member of the longest amicable chain with no element exceeding one million.
+        Dim limit As Integer = 15000 'Original: 1000000
+        Dim Chain As List(Of Integer) = New List(Of Integer)
+
+        For i As Integer = 2 To limit
+            Dim amicable As Integer = getDivisors(i).Sum
+            Dim tryChain As List(Of Integer) = New List(Of Integer) From {i}
+            While (amicable < limit) And (amicable > 1) And (Not tryChain.Contains(amicable))
+                tryChain.Add(amicable)
+                amicable = getDivisors(amicable).Sum
+            End While
+            If amicable = i Then
+                If tryChain.Count > Chain.Count Then
+                    Chain = tryChain
+                    'Lo corte en la cadena que empieza en 14316 porque ahí está la respuesta
+                End If
+            End If
+        Next
+
+        Return Chain.Min
+    End Function
+
+
+    Function Problem97() As Integer
+        Dim Prime As BigInteger = 2
+        For i As Integer = 2 To 7830457
+            Prime = last10bigMul(Prime, 2)
+        Next
+        Prime *= 28433
+        Prime += 1
+
+        Return (Prime.ToString.Substring(Prime.ToString.Length - 10))
+    End Function
+
+
+    Function Problem102() As Integer
+        'Using triangles.txt find the number of triangles for which the interior contains the origin.
+        Dim Count As Integer = 0
+        Dim Triangulos(,) As Integer = readTriangle("p102_triangles.txt")
+        For i As Integer = 0 To 999
+            Dim Punto1 As Punto, Punto2 As Punto, Punto3 As Punto
+            Punto1.X = Triangulos(i, 0)
+            Punto1.Y = Triangulos(i, 1)
+            Punto2.X = Triangulos(i, 2)
+            Punto2.Y = Triangulos(i, 3)
+            Punto3.X = Triangulos(i, 4)
+            Punto3.Y = Triangulos(i, 5)
+            If trianguloTieneAlOrigen(Punto1, Punto2, Punto3) Then
+                Count += 1
+            End If
+        Next
+
+        Return Count
+    End Function
+
+
+    Function Problem112() As Integer
+        'Find the least number for which the proportion of bouncy numbers is exactly 99%.
+        Dim Proportion As Decimal = 0.0
+        Dim i As Integer = 100
+        Dim BouncyCount As Integer = 0
+        Dim NonBouncyCount As Integer = 100
+
+        While Proportion < 99
+            i += 1
+            If isBouncy(i) Then
+                BouncyCount += 1
+            Else
+                NonBouncyCount += 1
+            End If
+            Proportion = (BouncyCount / (BouncyCount + NonBouncyCount)) * 100
+        End While
+        Return i
+    End Function
 End Module

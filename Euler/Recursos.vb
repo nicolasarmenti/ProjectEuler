@@ -1,4 +1,15 @@
 ﻿Module Recursos
+    Friend Structure Punto
+        Dim X As Integer
+        Dim Y As Integer
+    End Structure
+    Friend Structure Vector
+        Dim i As Integer
+        Dim j As Integer
+        Dim k As Integer
+    End Structure
+
+
     'Funciones con Primos
     Friend Function generarPrimos(ByVal fin As Integer) As List(Of Long)
         Dim Primos As List(Of Long) = New List(Of Long) From {2}
@@ -183,12 +194,51 @@
     End Function
 
     Friend Function perimeter(ByVal A As Integer, ByVal B As Integer, ByVal C As Integer) As Integer
-        Return A + b + C
+        Return A + B + C
     End Function
 
     Friend Function areaFromSides(ByVal A As Integer, ByVal B As Integer, ByVal C As Integer) As Decimal
         Dim P As Integer = perimeter(A, B, C)
         Return CDec(Math.Sqrt(P * (P - A) * (P - B) * (P - C)))
+    End Function
+
+    Friend Function last10bigMul(ByVal Base As BigInteger, ByVal Exp As Integer) As BigInteger
+        Dim Ans As BigInteger = BigInteger.Multiply(Base, Exp)
+        Dim Length As Integer = Ans.ToString.Length
+        Dim Longitud As Integer = Length - Math.Min(Length, 10)
+
+        Return Ans.ToString.Substring(Longitud)
+    End Function
+
+
+    '---------------------------------------------------------------------------------------------------'
+    'Funciones geométricas
+    Friend Function crossProduct(ByVal A As Punto, ByVal B As Punto) As Integer
+        Return ((A.X * B.Y) - (A.Y * B.X))
+    End Function
+
+    Friend Function sameSide(ByVal P1 As Punto, ByVal P2 As Punto, ByVal A As Punto, ByVal B As Punto) As Boolean
+        Dim V1 As Punto
+        V1.X = B.X - A.X
+        V1.Y = B.Y - A.Y
+        Dim V2 As Punto
+        V2.X = P1.X - A.X
+        V2.Y = P1.Y - A.Y
+        Dim V3 As Punto
+        V3.X = P2.X - A.X
+        V3.Y = P2.Y - A.Y
+        Dim Cross1 As Integer = crossProduct(V1, V2)
+        Dim Cross2 As Integer = crossProduct(V1, V3)
+        Return Math.Sign(Cross1) = Math.Sign(Cross2)
+    End Function
+
+    Friend Function trianguloTieneAlOrigen(ByVal Vertice1 As Punto, ByVal Vertice2 As Punto, ByVal Vertice3 As Punto) As Boolean
+        Dim Origen As Punto
+        Origen.X = 0
+        Origen.Y = 0
+        Return (sameSide(Origen, Vertice1, Vertice2, Vertice3) And _
+                sameSide(Origen, Vertice2, Vertice1, Vertice3) And _
+                sameSide(Origen, Vertice3, Vertice1, Vertice2))
     End Function
 
 
@@ -246,6 +296,30 @@
     Friend Function isTwiceSquare(ByVal N As Long) As Boolean
         Dim squateTest As Double = Math.Sqrt(N / 2)
         Return (squateTest = CInt(squateTest))
+    End Function
+
+    Friend Function isIncreasing(ByVal Number As Integer) As Boolean
+        Dim N As String = Number
+        For i As Integer = 0 To N.Length - 2
+            If N(i + 1) < N(i) Then
+                Return (False)
+            End If
+        Next
+        Return True
+    End Function
+
+    Friend Function isDecreasing(ByVal Number As Integer) As Boolean
+        Dim N As String = Number
+        For i As Integer = 0 To N.Length - 2
+            If N(i + 1) > N(i) Then
+                Return (False)
+            End If
+        Next
+        Return True
+    End Function
+
+    Friend Function isBouncy(ByVal Number As Integer) As Boolean
+        Return ((Not isIncreasing(Number)) And (Not isDecreasing(Number)))
     End Function
 
 
@@ -368,6 +442,37 @@
 
         reader.Close()
         Return inputList.ToArray
+    End Function
+
+    Friend Function readTriangle(ByVal file As String) As Integer(,)
+        Dim line As String
+        Dim linePieces() As String
+        Dim lines As Integer = 0
+
+        Dim reader As IO.StreamReader = New IO.StreamReader(file)
+        line = reader.ReadLine
+        While Not line = Nothing
+            lines += 1
+            line = reader.ReadLine
+        End While
+
+        Dim inputTriangle(lines - 1, 5) As Integer
+        reader.BaseStream.Seek(0, IO.SeekOrigin.Begin)
+
+        Dim j As Integer = 0
+        line = reader.ReadLine
+        While Not line = Nothing
+            linePieces = line.Split(CChar(","))
+            For i As Integer = 0 To linePieces.Length - 1
+                inputTriangle(j, i) = Integer.Parse(linePieces(i))
+            Next
+            j += 1
+            line = reader.ReadLine
+        End While
+
+        reader.Close()
+
+        Return inputTriangle
     End Function
 
 

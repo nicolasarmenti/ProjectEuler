@@ -1,7 +1,15 @@
 ﻿Module Module1
-    Sub Main()
+    Sub Main() 'Esto debería funcionar, pero tarda años
+        Dim Limit As BigInteger = BigInteger.Pow(10, 100)
+        Dim NonBouncyCount As Integer = 99
 
-        Console.WriteLine()
+        For i As BigInteger = 100 To Limit - 1
+            If Not isBouncy(i) Then
+                NonBouncyCount += 1
+            End If
+        Next
+
+        Console.WriteLine(NonBouncyCount)
         Console.ReadKey()
     End Sub
 End Module
