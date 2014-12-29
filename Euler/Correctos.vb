@@ -316,6 +316,35 @@
         Return Piramid(0, 0)
     End Function
 
+    Function Problem19() As Integer
+        Dim diaInicio As Integer = 2
+        Dim Cantidad As Integer = 0
+        Dim MesesCon31 As List(Of Integer) = New List(Of Integer) From {1, 3, 5, 7, 8, 10, 12}
+        Dim MesesCon30 As List(Of Integer) = New List(Of Integer) From {4, 6, 9, 11}
+
+        For anio As Integer = 1901 To 2000
+            For mes As Integer = 1 To 12
+                If MesesCon31.Contains(mes) Then
+                    diaInicio += 3
+                ElseIf MesesCon30.Contains(mes) Then
+                    diaInicio += 2
+                End If
+                If mes = 2 Then
+                    If isLeapYear(anio) Then
+                        diaInicio += 1
+                    End If
+                End If
+                If diaInicio > 7 Then
+                    diaInicio -= 7
+                End If
+                If diaInicio = 7 Then
+                    Cantidad += 1
+                End If
+            Next
+        Next
+
+        Return Cantidad - 1 'Le resto 1 porque cuenta el primer mes del 2001
+    End Function
 
     Function Problem20() As ULong
         'Find the sum of the digits in the number 100!

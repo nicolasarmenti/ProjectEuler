@@ -322,6 +322,20 @@
         Return ((Not isIncreasing(Number)) And (Not isDecreasing(Number)))
     End Function
 
+    Friend Function isLeapYear(ByVal anio As Integer) As Boolean
+        If (anio Mod 4) > 0 Then
+            Return False
+        End If
+        If (anio Mod 100) = 0 Then
+            If (anio Mod 400) = 0 Then
+                Return False
+            End If
+            Return True
+        End If
+        Return True
+    End Function
+
+
 
     '---------------------------------------------------------------------------------------------------'
     'Números poligonales

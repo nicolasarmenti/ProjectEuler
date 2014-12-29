@@ -9,7 +9,7 @@
     </SchemaVersion>
     <ProjectGuid>{174B74D9-CFB2-46AD-A174-B088636AD91A}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <StartupObject>Euler.Module1</StartupObject>
+    <StartupObject>Sub Main</StartupObject>
     <RootNamespace>Euler</RootNamespace>
     <AssemblyName>Euler</AssemblyName>
     <FileAlignment>512</FileAlignment>
